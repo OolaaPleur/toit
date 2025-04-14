@@ -1,0 +1,197 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+  # **Cursor Project Rules for Flutter App**
+
+## **General Setup**
+
+- Flutter 3.x with Material Design 3.
+- Use `dio` package for HTTP requests instead of `http`.
+- Use `const` wherever possible.
+- Follow **Clean Architecture** principles and separation of layers.
+- Use `bloc` + `freezed` for state management.
+- Use `getIt` for dependency injection.
+- Add comments to **all** classes and functions (in English).
+- Use **barrel files** for exports (except inside BLoC folders).
+- Project package name format: `com.oolaa.[app.name]` (e.g. for `Yggert Nu` package name would be `com.oolaa.yggert.nu`).
+
+## **Entry Points**
+
+- Create launch.json
+- Should run:
+  - `bootstrap()` method.
+  - Inside bootstrap:
+    - Set `Logger.level = Level.all` using `logging` package.
+    - Configure `FlutterError.onError` for global error logging.
+    - Set up `BlocObserver`.
+    - Call `runApp(MyApp())` from `app.dart`.
+
+## **Constants**
+
+- Store all constants inside `lib/constants/constants.dart`.
+  - Include constant values, internal/external links, enums, repeated strings (non-UI text), and style values (colors, font sizes, padding, etc).
+
+## **Localization**
+
+- Store all user-visible strings in `lib/l10n` using the `l10n` package.
+- Default language: English (unless otherwise specified).
+- Add `untranslated-messages-file: desiredFileName.txt` to config.
+
+## **Theme**
+
+- Use `flex_color_scheme` for theming.
+- Store themes in `lib/theme/theme.dart`.
+- App must support both dark and light themes depending on system theme.
+
+## **Linting**
+
+- Use `flutter_lints` as the linter.
+
+## **Docs and Exceptions**
+
+- `lib/docs/internals.md`: Create this file, leave initially empty.
+- `lib/exceptions/exceptions.dart`: Global exception classes go here.
+
+## **Commits and Todo File**
+
+- Use `todo.todo` file as a task reference.
+- Summarize commit message based on completed todos since the last commit and anything implemented but not listed in `todo.todo`.
+- Adhere to rules in the todo file and this rule file.
+
+## **Cursor & BLoC Rules (from https://cursor.directory/flutter-bloc-cubit-firebase-ai-rules)**
+
+- Adhere to BLoC best practices as described in the Cursor Flutter BLoC guide.
+- Maintain clear folder boundaries for BLoC, Repository, Data Sources, etc.
+- Reusable logic should not live inside BLoC classes directly.
+- Events should be granular, states descriptive.
+- Use `when`/`map` from `freezed` for exhaustive handling.
+- Keep UI unaware of internal BLoC events/states beyond what's necessary.
+- Avoid nesting business logic inside widgets.
+- Favor readability and maintainability over cleverness.
+
+## **Additional Engineering Rules**
+
+### **Key Principles**
+
+- Write concise, technical Dart code with accurate examples.
+- Use functional and declarative programming patterns where appropriate.
+- Prefer composition over inheritance.
+- Use descriptive variable names with auxiliary verbs (e.g., `isLoading`, `hasError`).
+- Structure files as: exported widget, subwidgets, helpers, static content, types.
+
+### **Dart/Flutter**
+
+- Use const constructors for immutable widgets.
+- Leverage Freezed for immutable state classes and unions.
+- Use arrow syntax for simple functions and methods.
+- Prefer expression bodies for one-line getters and setters.
+- Use trailing commas for better formatting and diffs.
+
+### **Error Handling and Validation**
+
+- Handle empty states within the displaying screen.
+- Manage error handling and loading states within Cubit states.
+
+### **Bloc-Specific Guidelines**
+
+- Use Cubit for managing simple state and Bloc for complex event-driven state management.
+- Extend states with Freezed for immutability.
+- Use descriptive and meaningful event names for Bloc.
+- Handle state transitions and side effects in Bloc's `mapEventToState`.
+- Prefer `context.read()` or `context.watch()` for accessing Cubit/Bloc states in widgets.
+
+### **Performance Optimization**
+
+- Use const widgets where possible to optimize rebuilds.
+- Implement list view optimizations (e.g., `ListView.builder`).
+- Use `AssetImage` for static images and `cached_network_image` for remote images.
+
+### **Key Conventions**
+
+- Use `GoRouter` for navigation and deep linking.
+- Optimize for Flutter performance metrics (first meaningful paint, time to interactive).
+- Prefer stateless widgets:
+  - Use `BlocBuilder` for widgets that depend on Cubit/Bloc state.
+  - Use `BlocListener` for handling side effects (navigation, dialogs).
+
+### **UI and Styling**
+
+- Use Flutter's built-in widgets and create custom widgets.
+- Implement responsive design using `LayoutBuilder` or `MediaQuery`.
+- Use themes for consistent styling across the app.
+- Use `Theme.of(context).textTheme.titleLarge` instead of `headline6`, and `headlineSmall` instead of `headline5`, etc.
+
+### **Widgets and UI Components**
+
+- Create small, private widget classes instead of `_build...` methods.
+- Implement `RefreshIndicator` for pull-to-refresh functionality.
+- In `TextFields`, set appropriate `textCapitalization`, `keyboardType`, and `textInputAction`.
+- Always include an `errorBuilder` when using `Image.network`.
+
+### **Miscellaneous**
+
+- Use the `logging` package instead of `print` for debugging, utilizing the `log()` function for structured logs.
+- Keep lines no longer than 80 characters.
+- Add commas before closing brackets in multi-parameter functions.
+
+### **Serialization Conventions**
+
+- Use `@JsonSerializable(fieldRename: FieldRename.snake)` for all models to ensure consistent snake_case in JSON.
+- Use `@JsonKey(includeFromJson: true, includeToJson: false)` for read-only fields (e.g., IDs or timestamps).
+- Use `@JsonValue(int)` for enum values that are serialized to the database.
+- Keep `createdAt`, `updatedAt`, and `isDeleted` in models where relevant.
+
+### **Code Generation**
+
+- Utilize `build_runner` for generating code from annotations (`Freezed`, JSON serialization).
+- Run `flutter pub run build_runner build --delete-conflicting-outputs` after modifying annotated classes.
+
+### **Documentation**
+
+- Document complex logic and non-obvious code decisions.
+- Follow official Flutter and Bloc documentation for best practices.
+
+## **📁 Project Folder Structure**
+
+```
+lib/
+│
+├── app/                        # App-level setup
+│   └── app.dart                # MyApp widget
+│
+├── bootstrap/                  # Bootstrap logic
+│   └── bootstrap.dart
+│
+├── constants/                 
+│   └── constants.dart          # All app constants
+│
+├── data/                       # Data sources (remote/local)
+│
+├── di/                         # Dependency Injection setup
+│   └── di.dart
+│
+├── docs/
+│   └── internals.md
+│
+├── exceptions/
+│   └── exceptions.dart         # Global exceptions
+│
+├── features/                   # Modular features (use barrel files)
+│   └── example_feature/
+│       ├── data/
+│       ├── domain/
+│       ├── presentation/
+│       └── widgets/
+│
+├── l10n/                       # Localization
+│   └── ...
+│
+├── main.dart       # Entry point
+│
+├── theme/
+│   └── theme.dart              # Light and Dark theme setup
+│
+└── utils/                      # Helpers and utilities
+```
