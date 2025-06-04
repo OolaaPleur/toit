@@ -97,6 +97,8 @@ class _MainScreenState extends State<MainScreen> {
         throw const MissingCredentialsException();
       }
 
+      await Future.delayed(const Duration(milliseconds: AppConstants.okButtonDelay));
+
       // Input code
       for (final digit in code.split('')) {
         await controller.evaluateJavascript(
@@ -112,7 +114,7 @@ class _MainScreenState extends State<MainScreen> {
         ''',
         );
         await Future.delayed(
-          Duration(milliseconds: AppConstants.buttonClickDelay),
+          const Duration(milliseconds: AppConstants.buttonClickDelay),
         );
       }
       await controller.evaluateJavascript(

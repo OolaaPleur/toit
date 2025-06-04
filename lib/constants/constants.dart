@@ -13,8 +13,8 @@ class AppConstants {
   static const String passwordKey = 'password';
 
   /// The delay between button clicks during auto-login (in milliseconds).
-  static const int buttonClickDelay = 100;
+  static const int buttonClickDelay = 70;
 
   /// The delay after clicking the OK button (in milliseconds).
-  static const int okButtonDelay = 300;
+  static const int okButtonDelay = 350;
 }
