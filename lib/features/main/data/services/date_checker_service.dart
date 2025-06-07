@@ -1,5 +1,7 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:webview_flutter/webview_flutter.dart' as webview_flutter;
 
 /// Service for checking dates in the web page.
 class DateCheckerService {
@@ -7,18 +9,30 @@ class DateCheckerService {
   DateCheckerService._();
 
   /// Gets the color status based on the date in the web page.
-  static Future<Color> getDateStatus(InAppWebViewController controller) async {
+  static Future<Color> getDateStatus(dynamic controller) async {
     try {
-      final dateText =
-          await controller.evaluateJavascript(
-                source: '''
-        (function() {
-          const tab = document.querySelector('li.active a');
-          return tab ? tab.textContent.trim() : '';
-        })();
-      ''',
-              )
-              as String;
+      String dateText;
+      if (Platform.isLinux) {
+        final result = await (controller as webview_flutter.WebViewController)
+            .runJavascriptReturningResult('''
+          (function() {
+            const tab = document.querySelector('li.active a');
+            return tab ? tab.textContent.trim() : '';
+          })();
+        ''');
+        dateText = result as String;
+      } else {
+        dateText =
+            await (controller as InAppWebViewController).evaluateJavascript(
+                  source: '''
+          (function() {
+            const tab = document.querySelector('li.active a');
+            return tab ? tab.textContent.trim() : '';
+          })();
+        ''',
+                )
+                as String;
+      }
 
       if (dateText.isEmpty) {
         return Colors.red;

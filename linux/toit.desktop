@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Toit
+Comment=Toit Application
+Exec=/home/oolaa/Projects/toit/build/linux/x64/release/bundle/toit
+Icon=/home/oolaa/Projects/toit/assets/icon.png
+Terminal=false
+Type=Application
+Categories=Utility;
+StartupWMClass=toit 

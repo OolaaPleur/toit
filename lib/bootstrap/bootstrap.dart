@@ -7,7 +7,7 @@ import '../app/app.dart';
 /// Bootstrap function to initialize the application.
 Future<void> bootstrap() async {
   // Set up logging
-  Logger.root.level = Level.ALL;
+  Logger.root.level = Level.INFO;
   Logger.root.onRecord.listen((record) {
     debugPrint('${record.level.name}: ${record.time}: ${record.message}');
   });
